@@ -5,17 +5,17 @@
 
 The Bewley-Huggett-Aiyagari-Imohoroğlu economies are the workhorse of modern macroeconomics. In these economies, markets are "incomplete". Agents cannot fully insure against risk and as results, households “self-insure” by holding a safe asset to smooth their consumption (see [Ljungqvist and Sargent (2018)](https://mitpress.mit.edu/books/recursive-macroeconomic-theory-fourth-edition) for a textbook treatment of this topic).
 
-In this notebook, I consider the model of Aiyagari (1994). While the original model abstracts from aggregate fluctuations, Economists have developped several techniques to simulate out-of-steady-state dynamics for this class of models.
+In this notebook, I consider the model of Aiyagari (1994). While the original model abstracts from aggregate fluctuations, Economists have developed several techniques to simulate out-of-steady-state dynamics for this class of models.
 
 Here, I use a methodology that is quite general. It is a **3-step procedure**, which proceeds as follows:
 
 1. Solve for the non-stochastic steady-state
 2. Perturbe the model around its non-stochastic steady-state
-3. Use the perturbation to calculate out-of-steady-state dynamics 
+3. Use the perturbation to calculate out-of-steady-state dynamics
 
 I use the [BKM and GenBKM](https://julienpascal.github.io/post/genbkm/) algorithms for step 2 and 3, which means that the only theoretical tool needed is **backward induction** (i.e. knowing the value tomorrow, what is the value today?).
 
-What are the cons of the methodology presented here? First, the methodology assumes a **small aggregate shock**. The idea is that if the economy is hit a by a small aggregate shock and that aggregate uncertainty vanishes, then the economy enventually goes back to its non-stochastic steady-state. If the shock is large, the value of steady-state may be altered and the methodology presented here is not adequate. An example of a large shock could be the disruption caused by COVID-19. 
+What are the cons of the methodology presented here? First, the methodology assumes a **small aggregate shock**. The idea is that if the economy is hit a by a small aggregate shock and that aggregate uncertainty vanishes, then the economy eventually goes back to its non-stochastic steady-state. If the shock is large, the value of steady-state may be altered and the methodology presented here is not adequate. An example of a large shock could be the disruption caused by COVID-19.
 
 This methodology also fails when the non-stochastic steady-state is not relevant for the dynamic economy. This can problematic in portfolio choice problems in which portfolios are indeterminate when aggregate uncertainty vanishes (see [Coeurdacier et al (2011)](https://hal-sciencespo.archives-ouvertes.fr/hal-00972801/document)).
 
@@ -31,40 +31,40 @@ $$ E_{0} \sum_{t=0}^{\infty} \beta^t U(c_t) $$
 
 subject to the constraint that how much they consume and how much they save in period $t$ (the left hand side of the next equation) should be equal to their labor earnings, plus their savings from last period (the right hand side of the next equation):
 
-$$ c_t + a_{t+1} = w_t l_t + (1 + r_t) a_t $$ 
+$$ c_t + a_{t+1} = w_t l_t + (1 + r_t) a_t $$
 
 The variable $l_t$ captures idiosyncratic risk in labor earnings and could be interpreted as unemployment risk. There is also the assumption that consumption cannot be negative and that agents cannot borrow more than a certain amount $B$:
 
 $$ c_t \geq 0 $$
 
-$$ a_t \geq -B $$ 
+$$ a_t \geq -B $$
 
 The behavior of firms can be summarized by a representative firm hiring workers and capital:
 
-$$ Y_t = z_t K_t^{\alpha} L_t^{1-\alpha} $$ 
+$$ Y_t = z_t K_t^{\alpha} L_t^{1-\alpha} $$
 
-where $Y_t$ is total output, $K_t$ is the aggregate capital level and $L_t$ is the aggregate labor supply. The variables $w_t$ and $r_t$ are pinned down each period by the first order conditions (FOCs) for a maximizing firm. Note that at the non-stochastic steady-state $z_t = z_{SS} = 1$ (by definition) and both $w_t$ and $r_t$ are constant. Another thing to notice is that because agents have to take into consideration $w_t$ and $r_t$ when making decisions, the cross-sectional distribution of agents across capital and idiosyncratic types matters (through the FOCs of the representative firm).
+where $Y_t$ is total output, $K_t$ is the aggregate capital level and $L_t$ is the aggregate labor supply. The variables $w_t$ and $r_t$ are pinned down each period by the first order conditions (FOCs) for a maximizing firm. Note that at the non-stochastic steady-state $z_t = z_{SS} = 1$ (by definition) and both $w_t$ and $r_t$ are constant. Another thing to notice is that because agents have to take into consideration $w_t$ and $r_t$ when making decisions, the cross-sectional distribution of agents across capital and idiosyncratic states matters (through the FOCs of the representative firm).
 
 ## II. Methodology
 
-To solve for individual policy functions, I use the endogeneous grid method (EGM) of Carroll (2006). The main idea of this method is to start from the end-of-period level of capital. Using the Euler equation, one may recover the beginning-of-period consumption and level of capital without using a rootfinding algorithm. 
+To solve for individual policy functions, I use the endogenous grid method (EGM) of Carroll (2006). The main idea of this method is to start from the end-of-period level of capital. Using the Euler equation, one may recover the beginning-of-period consumption and level of capital without using a root-finding algorithm.
 
 To determine the non-stochastic equilibrium, I solve for the fixed-point problem over the aggregate capital level f(K*) = 0 using [Brent's method](https://en.wikipedia.org/wiki/Brent%27s_method).
 
-To calculate the response of the economy to one-period unforseen aggregate shock (an "MIT shock"), I use a standard backward-forward ["shooting" method](https://en.wikipedia.org/wiki/Shooting_method): 
+To calculate the response of the economy to one-period unforeseen aggregate shock (an "MIT shock"), I use a standard backward-forward ["shooting" method](https://en.wikipedia.org/wiki/Shooting_method):
 1. holding the path of aggregate capital $\{K_t\}_{t=1}^{T}$, calculate the policy functions
 2. holding constant the policy functions, calculate the aggregate capital $\{K_t\}_{t=1}^{T}$
 3. repeat until convergence of the path for aggregate capital $\{K_t\}_{t=1}^{T}$
 
 To simulate out-of-steady-state dynamics, I use the [BKM algorithm](https://ideas.repec.org/a/eee/dyncon/v89y2018icp68-92.html), which relies on the assumption that the response of the economy to an aggregate shock $d_t$ is **linear** with respect to the **aggregate state** $z_t$:
 
-$$ d_t = z_t d(1, 0, 0, ...) + z_{t-1}d(0, 1, 0, ...) + z_{t-2}d(0, 0, 1, ...) + ... $$ 
+$$ d_t = z_t d(1, 0, 0, ...) + z_{t-1}d(0, 1, 0, ...) + z_{t-2}d(0, 0, 1, ...) + ... $$
 
 or more compactly:
 
-$$ d_t = \sum_{k=0}^{+\infty} z_{t-k} d_{k} $$ 
+$$ d_t = \sum_{k=0}^{+\infty} z_{t-k} d_{k} $$
 
-where 
+where
 
 $$ d_{1} = d(1,0,0,...)$$
 $$ d_{2} = d(0,1,0,...)$$
@@ -233,7 +233,7 @@ function backward_update(g_low_ss::Function, g_high_ss::Function, K_path_guess::
     a_path = zeros(p.nI, p.grid_size, nT) #to store policy functions on savings grid
     R_path = zeros(nT) #to store the interest rate on path
     W_path = zeros(nT) #to store the wage on path
-    
+
     #Start from the steady-state and iterate backward
     #holding constant the path for {K_t,z_t}
     #---------------------------------------------------
@@ -245,14 +245,13 @@ function backward_update(g_low_ss::Function, g_high_ss::Function, K_path_guess::
         # Current period's policy, given next period
         a_path[:,:,t-1], c_new, g_low_path[t-1], g_high_path[t-1] = euler_back(g_low_path[t], g_high_path[t], R_path[t-1], W_path[t-1], R_path[t], W_path[t], p)
     end
-    
+
     return a_path, g_low_path, g_high_path
 end
 
 function forward_update(K_star::Float64, a_path::Array{Float64,3}, d_ss::Array{Float64,1}, p::Params)
     """
     Update forward the distribution of agents + aggregate capital
-    [TODO]: should be a function that updates:
     dd_path_forward, K_path_forward
     """
     nT = length(z_path)
@@ -268,7 +267,7 @@ function forward_update(K_star::Float64, a_path::Array{Float64,3}, d_ss::Array{F
         dd_path_forward[:,t] = tt*dd_path_forward[:,t-1]
         K_path_forward[t] = aggregate_K(dd_path_forward[:,t], p)
     end
-    
+
     return dd_path_forward, K_path_forward
 end
 ```
@@ -282,7 +281,7 @@ end
 
 #### Finding the transition path
 
-One problem with backward-forward shooting method is that updating the path for $\{K_t\}_{t=1}^{T}$ "too quickly" may result in the overall procedure to diverge. An easy fix is to take a convex combination of the 
+One problem with backward-forward shooting method is that updating the path for $\{K_t\}_{t=1}^{T}$ "too quickly" may result in the overall procedure to diverge. An easy fix is to take a convex combination of the
 previous guess and the newly calculated path, with $\lambda$ small:
 
 $\{K^{NEW}_t\}_{t=1}^{T} = \lambda \{K_t\}_{t=1}^{T} + (1-\lambda)\{K^{OLD}_t\}_{t=1}^{T}$
@@ -291,7 +290,7 @@ The next function implement this idea, with the extra feature that $\lambda$ inc
 
 
 ```julia
-function solve_mit!(K_path, g_low_ss::Function, g_high_ss::Function, d_ss::Array{Float64,1}, 
+function solve_mit!(K_path, g_low_ss::Function, g_high_ss::Function, d_ss::Array{Float64,1},
                     K_ss::Float64, z_path::Array{Float64,1}, p::Params; convex_combination::Float64 = 0.2,
                     shrink_factor::Float64 = 0.5, expand_factor::Float64 = 1.05,
                     max_iter::Int64 = 1000, tol::Float64=1e-6, verbose::Bool=true, display_iter::Int64 = 20)
@@ -302,18 +301,18 @@ function solve_mit!(K_path, g_low_ss::Function, g_high_ss::Function, d_ss::Array
     diff_old = Inf #initialization
     convergence_flag = 0 #initialization
     damp = convex_combination #initial dampening parameter
-    
+
     for i_mit=1:max_iter
-    
+
         # Step 1. Solve backward the policy functions {g_t(a,e_low), g_t(a,e_high)}, keeping {K_t,z_t} constant:
         a_path, g_low_path, g_high_path = backward_update(g_low_ss, g_high_ss, K_path[i_mit], z_path, p);
-        
+
         #2. Solve forward {K_t,z_t}, keeping policy functions {g_t(a,e_low), g_t(a,e_high)} constant:
         dd_path_forward, K_path_forward = forward_update(K_ss, a_path, d_star, p);
-        
+
         # Distance between guess for {K_t} and implied values:
         diff = maximum(abs.(K_path_forward - K_path[i_mit]))
-        
+
         # Display every display_iter iterations
         if verbose==true
             if mod(i_mit,display_iter) == 0
@@ -344,10 +343,10 @@ function solve_mit!(K_path, g_low_ss::Function, g_high_ss::Function, d_ss::Array
             # Store the updated path for {K_t}
             push!(K_path, damp.*K_path_forward .+ (1.0 - damp).*K_path[i_mit])
             diff_old = diff
-                
+
         end
     end
-    
+
     return K_path, convergence_flag
 end
 ```
@@ -372,8 +371,8 @@ z_path = ones(max_t)
 z_path[1] = z_ss*z_shock #initial shock
 
 # Evolution of aggregate productivity in level:
-for t_index=2:max_t 
-    z_path[t_index] = z_path[t_index-1]^p.rho 
+for t_index=2:max_t
+    z_path[t_index] = z_path[t_index-1]^p.rho
 end
 
 # Heroic guess for the initial path of {K_t}: K_t = K* for all t
@@ -447,7 +446,7 @@ plot!(p1, xx[RBCp.iK,2:end] .+ K_star, label = "K_t RBC", color = "black", xlabe
 
 
 
-*Notes: This graph shows the impulse reponse of K_t of for the Aiyagari model and a RBC model.*
+*Notes: This graph shows the impulse response of K_t of for the Aiyagari model and a RBC model.*
 
 
 ```julia
@@ -470,10 +469,10 @@ p5 = plot(p1, p2, p3, p4)
 
 #### Linearity checks
 
-To simulate the stochastic economy, the BKM algorithm makes the assumption that an MIT shock is linear with 
+To simulate the stochastic economy, the BKM algorithm makes the assumption that an MIT shock is linear with
 respect to the aggregate shock. That is, doubling the initial shock will simply double the value of aggregates
-along the transition path, but the shape of transition paths will remain the same. The next block of codes 
-calculates several transition paths for different initial aggregate shocks. 
+along the transition path, but the shape of transition paths will remain the same. The next block of codes
+calculates several transition paths for different initial aggregate shocks.
 
 
 ```julia
@@ -491,13 +490,13 @@ z_path_sigma = zeros(max_t, length(array_sigma))
 z_path_sigma_dev = zeros(max_t, length(array_sigma))
 
 for (index_sigma, sigma) in enumerate(array_sigma)
-    
+
     # Let's generate a path for the aggregate shock
     z_path = ones(max_t)
     z_path[1] = z_ss + z_ss*sigma
 
     # Evolution of aggregate productivity in level:
-    for t_index=2:max_t 
+    for t_index=2:max_t
         z_path[t_index] = z_path[t_index-1]^p.rho
     end
 
@@ -512,16 +511,16 @@ for (index_sigma, sigma) in enumerate(array_sigma)
     if convergence_flag!=1
         error("No convergence for z(1) = $(z_path[1]).")
     end
-    
+
     # store the path for z:
     z_path_sigma[:, index_sigma] = z_path
-    
+
     # store for the %deviation of aggregate productivity from its steady-state value
     z_path_sigma_dev[:, index_sigma] = z_path./z_ss .- 1.0
-    
+
     # Scaled IRF: how a percentage deviation in z_t from its steady-state results in a % deviation of k_t
     x_mit_scaled_sigma[:, index_sigma] = (K_path[end]./K_star .- 1.0)./z_path_sigma_dev[1, index_sigma]
-    
+
 end
 ```
 
@@ -594,7 +593,7 @@ z_path = ones(max_t)
 z_path[1] = z_ss
 
 # Evolution of aggregate productivity in level:
-for t_index=2:max_t 
+for t_index=2:max_t
     z_path[t_index] = z_path[t_index-1]^p.rho + shocks_t[t_index]
 end
 
@@ -623,6 +622,8 @@ plot(p1,p2, fg_legend = :transparent, legend=:best, layout=(2,1))
 *Notes: The top panel shows the percentage deviation of aggregate productivity from its steady-state value. The bottom panel shows the percentage deviation of capital from its steady-state value.*
 
 ## Conclusion
+
+This notebook present the model of Aiyagari (1994) and a general three-step procedure to simulate out-of-steady-state dynamics for models of this class for "small" shocks. Solving this class of model for large shocks seems to be [much more complicated](https://www.google.com/search?client=ubuntu&channel=fs&q=Probabilistic+Theory+ofMean+Field+Gameswith+Applications+II&ie=utf-8&oe=utf-8) and is still an active area of research.
 
 ## Links
 
