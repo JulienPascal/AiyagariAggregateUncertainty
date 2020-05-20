@@ -4,8 +4,16 @@ This repository solves the Aiyagari model (1994) with aggregate uncertainty
 
 ## Notebook
 
+https://github.com/JulienPascal/AiyagariAggregateUncertainty/blob/master/AiyagariBKM.ipynb
 
-## Link
+
+![alt text](https://github.com/JulienPascal/AiyagariAggregateUncertainty/blob/master/AiyagariBKM_files/AiyagariBKM_18_0.svg.png)
+
+![alt text](https://github.com/JulienPascal/AiyagariAggregateUncertainty/blob/master/AiyagariBKM_files/AiyagariBKM_30_0.svg.png)
+
+![alt text](https://github.com/JulienPascal/AiyagariAggregateUncertainty/blob/master/AiyagariBKM_files/AiyagariBKM_44_0.svg.png)
+
+## Links
 
 * An excellent course on heterogeneous agent models (Aiyagari model (1994) and more) with code in Matlab, Python and Julia: https://alisdairmckay.com/Notes/HetAgents/index.html
 * More on the EGM method: https://julia.quantecon.org/dynamic_programming/egm_policy_iter.html
