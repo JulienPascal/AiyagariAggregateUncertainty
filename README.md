@@ -1,11 +1,13 @@
 # Aiyagari Aggregate Uncertainty
 
-This repository solves the Aiyagari model (1994) with aggregate uncertainty
+This repository solves the Aiyagari model (1994) with aggregate uncertainty.
 
 ## Notebook
 
 https://github.com/JulienPascal/AiyagariAggregateUncertainty/blob/master/AiyagariBKM.ipynb
 
+
+## Preview
 
 ![alt text](https://github.com/JulienPascal/AiyagariAggregateUncertainty/blob/master/AiyagariBKM_files/AiyagariBKM_18_0.svg.png)
 
