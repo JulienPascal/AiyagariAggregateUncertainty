@@ -24,6 +24,7 @@ https://github.com/JulienPascal/AiyagariAggregateUncertainty/blob/master/Aiyagar
 
 ## References
 
+* Aiyagari, S. Rao. "Uninsured idiosyncratic risk and aggregate saving." The Quarterly Journal of Economics 109.3 (1994): 659-684.
 * Bewley, Truman. "A difficulty with the optimum quantity of money." Econometrica: Journal of the Econometric Society (1983): 1485-1504.
 * Boppart, Timo, Per Krusell, and Kurt Mitman. “Exploiting MIT shocks in heterogeneous-agent economies: the impulse response as a numerical derivative.” Journal of Economic Dynamics and Control 89 (2018): 68-92.
 * Christopher D Carroll. The method of endogenous gridpoints for solving dynamic stochastic optimization problems. Economics Letters, 91(3):312–320, 2006.
